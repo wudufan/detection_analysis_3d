@@ -92,8 +92,9 @@ def generate_tp_bbox(
         )
         # offset the bbox so it's centered on the label center
         bbox[:3] = bbox[:3] - np.array([label_bbox[4]] * 3) * center_offset_max / 2 + label_bbox[1:4]
-        # prob = np.clip(rng.normal(tp_prob_mean, tp_prob_std), 0, 1)
-        prob = scipy.stats.truncnorm.rvs(0, 1, tp_prob_mean, tp_prob_std)
+        a = (0.001 - tp_prob_mean) / tp_prob_std
+        b = (0.999 - tp_prob_mean) / tp_prob_std
+        prob = scipy.stats.truncnorm.rvs(a, b, tp_prob_mean, tp_prob_std)
         df.append({
             'bbox': np.array([prob] + bbox),
             'prob': prob,
@@ -124,8 +125,9 @@ def generate_fp_bbox(
         bbox, size_in_mm = generate_bbox(
             img_size, size_min, size_max, pixel_size, rng
         )
-        # prob = np.clip(rng.normal(fp_prob_mean, fp_prob_std), 0, 1)
-        prob = scipy.stats.truncnorm.rvs(0, 1, fp_prob_mean, fp_prob_std)
+        a = (0.001 - fp_prob_mean) / fp_prob_std
+        b = (0.999 - fp_prob_mean) / fp_prob_std
+        prob = scipy.stats.truncnorm.rvs(a, b, fp_prob_mean, fp_prob_std)
         df.append({
             'bbox': np.array([prob] + bbox),
             'prob': prob,
