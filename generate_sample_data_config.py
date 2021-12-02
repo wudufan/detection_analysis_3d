@@ -34,7 +34,7 @@ rel_size_min = 0.8
 rel_size_max = 1.2
 # probability distribution (gaussian)
 tp_prob_mean = 0.8
-tp_prob_std = 0.2
+tp_prob_std = 0.5
 # False positives
 max_fp_per_patient = 15
 fp_prob_mean = 0.5

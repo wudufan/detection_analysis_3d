@@ -4,9 +4,9 @@ The sample data is an aneurysm detection scenario.
 '''
 
 # %%
-from numpy.core.defchararray import center
 import pandas as pd
 import numpy as np
+import scipy.stats
 
 import generate_sample_data_config as config
 
@@ -92,7 +92,8 @@ def generate_tp_bbox(
         )
         # offset the bbox so it's centered on the label center
         bbox[:3] = bbox[:3] - np.array([label_bbox[4]] * 3) * center_offset_max / 2 + label_bbox[1:4]
-        prob = np.clip(rng.normal(tp_prob_mean, tp_prob_std), 0, 1)
+        # prob = np.clip(rng.normal(tp_prob_mean, tp_prob_std), 0, 1)
+        prob = scipy.stats.truncnorm.rvs(0, 1, tp_prob_mean, tp_prob_std)
         df.append({
             'bbox': np.array([prob] + bbox),
             'prob': prob,
@@ -123,7 +124,8 @@ def generate_fp_bbox(
         bbox, size_in_mm = generate_bbox(
             img_size, size_min, size_max, pixel_size, rng
         )
-        prob = np.clip(rng.normal(fp_prob_mean, fp_prob_std), 0, 1)
+        # prob = np.clip(rng.normal(fp_prob_mean, fp_prob_std), 0, 1)
+        prob = scipy.stats.truncnorm.rvs(0, 1, fp_prob_mean, fp_prob_std)
         df.append({
             'bbox': np.array([prob] + bbox),
             'prob': prob,
